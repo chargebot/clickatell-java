@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/clickatell-java.iml" filepath="$PROJECT_DIR$/clickatell-java.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clickatell-java.main.iml" filepath="$PROJECT_DIR$/.idea/modules/clickatell-java.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clickatell-java.test.iml" filepath="$PROJECT_DIR$/.idea/modules/clickatell-java.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/open-source.clickatell-java.iml" filepath="$PROJECT_DIR$/.idea/modules/open-source.clickatell-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.clickatell.commons.clickatell-java.iml" filepath="$PROJECT_DIR$/.idea/modules/com.clickatell.commons.clickatell-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.iml" filepath="$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.main.iml" filepath="$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.test.iml" filepath="$PROJECT_DIR$/.idea/modules/clickatell/com.clickatell.platform.clickatell.test.iml" />
     </modules>
   </component>
 </project>

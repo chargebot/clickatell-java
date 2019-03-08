@@ -67,30 +67,6 @@
     <option name="DOWHILE_BRACE_FORCE" value="3" />
     <option name="WHILE_BRACE_FORCE" value="3" />
     <option name="FOR_BRACE_FORCE" value="3" />
-    <DBN-PSQL>
-      <case-options enabled="true">
-        <option name="KEYWORD_CASE" value="lower" />
-        <option name="FUNCTION_CASE" value="lower" />
-        <option name="PARAMETER_CASE" value="lower" />
-        <option name="DATATYPE_CASE" value="lower" />
-        <option name="OBJECT_CASE" value="preserve" />
-      </case-options>
-      <formatting-settings enabled="false" />
-    </DBN-PSQL>
-    <DBN-SQL>
-      <case-options enabled="true">
-        <option name="KEYWORD_CASE" value="lower" />
-        <option name="FUNCTION_CASE" value="lower" />
-        <option name="PARAMETER_CASE" value="lower" />
-        <option name="DATATYPE_CASE" value="lower" />
-        <option name="OBJECT_CASE" value="preserve" />
-      </case-options>
-      <formatting-settings enabled="false">
-        <option name="STATEMENT_SPACING" value="one_line" />
-        <option name="CLAUSE_CHOP_DOWN" value="chop_down_if_statement_long" />
-        <option name="ITERATION_ELEMENTS_WRAPPING" value="chop_down_if_not_single" />
-      </formatting-settings>
-    </DBN-SQL>
     <JavaCodeStyleSettings>
       <option name="FIELD_NAME_PREFIX" value="m" />
       <option name="STATIC_FIELD_NAME_PREFIX" value="s" />
@@ -136,6 +112,7 @@
       </option>
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="999" />
       <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="999" />
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
     <DBN-PSQL>
       <case-options enabled="true">
@@ -464,10 +441,9 @@
       </arrangement>
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
+      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
       <option name="ALIGN_MULTILINE_PARAMETERS_IN_CALLS" value="true" />
       <option name="ALIGN_MULTILINE_EXTENDS_LIST" value="true" />
-      <option name="CALL_PARAMETERS_WRAP" value="1" />
-      <option name="METHOD_PARAMETERS_WRAP" value="1" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />

@@ -1,22 +1,201 @@
-plugins {
-  id 'org.jetbrains.kotlin.jvm' version '1.3.21'
-}
-description = "clickatell-java"
-dependencies {
-  implementation (
-      "org.jetbrains.kotlin:kotlin-stdlib-jdk8",
-      "com.googlecode.json-simple:json-simple:1.1.1")
-}
-repositories {
-  mavenCentral()
-}
-compileKotlin {
-  kotlinOptions {
-    jvmTarget = "1.8"
+import java.util.regex.Matcher
+import net.researchgate.release.GitAdapter
+
+buildscript {
+  ext.kotlin_version = '1.3.10'
+  ext.spek_version = '1.1.5'
+  ext.dropwizard_version = '1.2.0'
+  ext.jooq_version = '3.10.0'
+  ext.gson_version = '2.7'
+  ext.jackson_version = '2.9.1'
+  ext.flyway_version = '5.1.0'
+  ext.postgresql_driver = '42.2.2'
+  ext.glowroot_version = '0.10.12'
+  ext.typesafe_config_version = "1.3.3"
+  ext.consul_client_version = "1.3.1"
+  ext.kodein_version = "6.1.0"
+  ext.amqp_version = "4.2.0"
+  ext.rabbit_puppy_version = "5c6e261549" //"master-SNAPSHOT"
+  ext.fuel_version = "2.0.1"
+
+  repositories {
+    mavenCentral()
+    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://jcenter.bintray.com/" }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven {
+      url "${nexusUrl}/repository/chargebot/"
+      credentials {
+        username "${project.getProperties().nexusUsername}"
+        password "${project.getProperties().nexusPassword}"
+      }
+    }
+    maven { url "https://jitpack.io" }
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0"
+    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    classpath 'com.netflix.nebula:gradle-lint-plugin:9.3.2'
   }
 }
-compileTestKotlin {
-  kotlinOptions {
-    jvmTarget = "1.8"
+plugins {
+  id "net.researchgate.release" version "2.4.0"
+  id "nebula.dependency-lock" version "5.0.4"
+}
+apply plugin: 'idea'
+apply plugin: 'nebula.lint'
+
+description = 'clickatell-java'
+
+allprojects {
+  group = 'com.clickatell.commons'
+  repositories {
+    maven { url "https://jitpack.io" }
+  }
+}
+
+subprojects {
+  buildscript {
+    repositories {
+      mavenCentral()
+      maven { url "http://repo.maven.apache.org/maven2" }
+      maven { url "https://jcenter.bintray.com/" }
+      maven { url "http://dl.bintray.com/kotlin/ktor" }
+      maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+      maven { url "https://artifacts.alfresco.com/nexus/content/repositories/public/" }
+      maven {
+        url "${nexusUrl}/repository/chargebot/"
+        credentials {
+          username "${project.getProperties().nexusUsername}"
+          password "${project.getProperties().nexusPassword}"
+        }
+      }
+      maven { url "https://jitpack.io" }
+    }
+    dependencies {
+      classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+      classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0"
+      classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+      classpath 'com.netflix.nebula:gradle-lint-plugin:9.3.2'
+    }
+  }
+  apply plugin: 'java'
+  apply plugin: 'maven'
+  apply plugin: 'kotlin'
+  apply plugin: 'org.junit.platform.gradle.plugin'
+  apply plugin: 'com.github.johnrengelman.shadow'
+  apply plugin: 'nebula.lint'
+
+  group = 'com.clickatell.platform'
+  version = rootProject.version
+
+  junitPlatform {
+    filters {
+      engines {
+        include 'spek'
+      }
+    }
+  }
+
+  repositories {
+    jcenter()
+    mavenCentral()
+    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://jcenter.bintray.com/" }
+    maven { url "http://dl.bintray.com/kotlin/ktor" }
+    maven { url "https://dl.bintray.com/kotlin/kotlinx" }
+    maven { url "http://dl.bintray.com/jetbrains/spek" }
+    maven {
+      url "${nexusUrl}/repository/chargebot/"
+      credentials {
+        username "${project.getProperties().nexusUsername}"
+        password "${project.getProperties().nexusPassword}"
+      }
+    }
+    maven { url "https://jitpack.io" }
+  }
+
+  sourceCompatibility = 1.8
+  compileKotlin {
+    kotlinOptions.jvmTarget = "$sourceCompatibility"
+  }
+  compileTestKotlin {
+    kotlinOptions.jvmTarget = "$sourceCompatibility"
+  }
+  sourceSets {
+    main.java.srcDirs += [file("$buildDir/generated/source/kapt/main")]
+  }
+  kotlin {
+    experimental {
+      coroutines "enable"
+    }
+  }
+
+  dependencies {
+    // Kodein stuff
+    compile(
+        "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
+        "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version",
+        "org.jetbrains.spek:spek-subject-extension:$spek_version",
+    )
+    testCompile(
+        "org.junit.jupiter:junit-jupiter-api:5.0.1",
+        "org.jetbrains.spek:spek-api:$spek_version",
+        "com.natpryce:hamkrest:1.4.2.2"
+    )
+    testRuntime(
+        "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
+    )
+  }
+
+  uploadArchives {
+    repositories {
+      mavenDeployer {
+        setUniqueVersion(true)
+        pom.project {
+          groupId 'com.clickatell.platform'
+          artifactId project.name
+          version rootProject.version
+        }
+        repository(url: "${nexusUrl}/repository/chargebot") {
+          authentication(
+              userName: "${project.getProperties().nexusUsername}",
+              password: "${project.getProperties().nexusPassword}"
+          )
+        }
+      }
+    }
+  }
+}
+beforeReleaseBuild.dependsOn subprojects.install
+afterReleaseBuild.dependsOn subprojects.uploadArchives
+task releaseBuild {
+  dependsOn subprojects.findResults { it.tasks.findByName('build') }
+}
+release {
+  failOnCommitNeeded = true
+  failOnPublishNeeded = true
+  failOnSnapshotDependencies = true
+  failOnUnversionedFiles = true
+  failOnUpdateNeeded = true
+  revertOnFail = true
+  preCommitText = ''
+  preTagCommitMessage = '[Gradle Release Plugin] - pre tag commit: '
+  tagCommitMessage = '[Gradle Release Plugin] - creating tag: '
+  newVersionCommitMessage = '[Gradle Release Plugin] - new version commit: '
+  tagTemplate = '${version}'
+  versionPropertyFile = 'gradle.properties'
+  versionProperties = []
+  buildTasks = ['releaseBuild']
+  versionPatterns = [
+      /(\d+)([^\d]*$)/: { Matcher m, Project p -> m.replaceAll("${(m[0][1] as int) + 1}${m[0][2]}") }
+  ]
+  scmAdapters = [GitAdapter]
+  git {
+    pushToRemote = 'origin'
+    pushToBranchPrefix = ''
+    commitVersionFileOnly = false
+    requireBranch = ~/master|staging|develop|development|platform|feature\/(.*?)/
   }
 }

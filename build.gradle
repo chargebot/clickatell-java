@@ -87,7 +87,7 @@ subprojects {
   apply plugin: 'com.github.johnrengelman.shadow'
   apply plugin: 'nebula.lint'
 
-  group = 'com.clickatell.platform'
+  group = 'com.clickatell.classic'
   version = rootProject.version
 
   junitPlatform {
@@ -154,7 +154,7 @@ subprojects {
       mavenDeployer {
         setUniqueVersion(true)
         pom.project {
-          groupId 'com.clickatell.platform'
+          groupId 'com.clickatell.classic'
           artifactId project.name
           version rootProject.version
         }

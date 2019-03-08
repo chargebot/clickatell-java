@@ -4,6 +4,8 @@
     <bytecodeTargetLevel>
       <module name="clickatell-java.main" target="1.8" />
       <module name="clickatell-java.test" target="1.8" />
+      <module name="com.clickatell.classic.clickatell.main" target="1.8" />
+      <module name="com.clickatell.classic.clickatell.test" target="1.8" />
       <module name="com.clickatell.platform.clickatell.main" target="1.8" />
       <module name="com.clickatell.platform.clickatell.test" target="1.8" />
     </bytecodeTargetLevel>
